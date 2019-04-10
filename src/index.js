@@ -5,6 +5,7 @@ const methodsMap = {
   reuseMemo: 2,
   reuseReducer: 2,
   reuseCallback: 2,
+  reuseRef: 1,
   Memo: 2
 }
 

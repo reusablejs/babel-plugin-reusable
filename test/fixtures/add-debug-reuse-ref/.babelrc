@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "../../../src"
+    ],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
+}
