@@ -36,7 +36,7 @@ export function transformEffector(variableDeclaration, path, specialMethodArgume
   const parentUnitName = variableDeclaration.node.id.name
   const effectIndex = (path.parentPath.parentPath.node.body || []).indexOf(path.parentPath.node);
 
-  if (parentUnitName && effectIndex) {
+  if (parentUnitName && effectIndex !== -1) {
     fillMissingArguments(specialMethodArgumentsLength, argumentsLength, path, t)
     path.node.arguments.push(
       t.StringLiteral(`${parentUnitName} Effect (${effectIndex})`),
