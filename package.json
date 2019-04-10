@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
+  "version": "1.0.0-alpha.1",
   "name": "babel-plugin-reusable",
   "description": "Improve the debugging experience for reusable",
   "repository": "reusablejs/babel-plugin-reusable",
