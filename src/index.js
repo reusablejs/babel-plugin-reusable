@@ -70,7 +70,8 @@ export default function (babel) {
                           variableDeclaration: variableDeclaration,
                           path: path,
                           argumentsLength: argumentsLength,
-                          reuseMethodArgumentsLength: reuseMethodArgumentsLength
+                          reuseMethodArgumentsLength: reuseMethodArgumentsLength,
+                          methodName: importName
                         })
                       }
                     }

@@ -53,7 +53,7 @@ export function transformIdentifier({ t, variableDeclaration, path, argumentsLen
   return false
 }
 
-export function transformFallback({ t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength }) {
+export function transformFallback({ t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength, methodName }) {
   const parentUnitName = variableDeclaration.node.id.name
   const effectIndex    = (path.parentPath.parentPath.node.body || []).indexOf(path.parentPath.node)
 
@@ -65,7 +65,7 @@ export function transformFallback({ t, variableDeclaration, path, argumentsLengt
       t: t
     })
     path.node.arguments.push(
-      t.StringLiteral(`${parentUnitName} Effect (${effectIndex})`),
+      t.StringLiteral(`${parentUnitName} ${methodName} (${effectIndex})`),
     )
 
     return true

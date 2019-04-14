@@ -10,10 +10,10 @@ export const todosUnit = Memo(() => {
         payload: keyedTodos
       });
     });
-  }, [], "todosUnit Effect (1)");
+  }, [], "todosUnit reuseEffect (1)");
   reuseEffect(() => {
     console.log('fake effect');
-  }, undefined, "todosUnit Effect (2)");
+  }, undefined, "todosUnit reuseEffect (2)");
   reuseEffect(() => {
     console.log('fake effect');
   }, undefined, 'FAKE_DEBUG_NAME EFFECT'); // return object with action creators wrapped in dispatch:
