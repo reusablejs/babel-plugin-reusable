@@ -1,5 +1,5 @@
-export function fillMissingArguments(reuseMethodArgumentsLength, argumentsLength, path, t) {
-  const missingArguments = reuseMethodArgumentsLength - argumentsLength;
+export function fillMissingArguments({ reuseMethodArgumentsLength, argumentsLength, path, t }) {
+  const missingArguments                                       = reuseMethodArgumentsLength - argumentsLength;
 
   // fill missing arguments
   [...Array(missingArguments).keys()].forEach(() => {
@@ -7,39 +7,69 @@ export function fillMissingArguments(reuseMethodArgumentsLength, argumentsLength
   })
 }
 
-export function transformArrayPattern(t, variableDeclaration, reuseMethodArgumentsLength, path, argumentsLength) {
+export function transformArrayPattern({ t, variableDeclaration, reuseMethodArgumentsLength, path, argumentsLength }) {
   if (t.isArrayPattern(variableDeclaration.node.id) && variableDeclaration.node.id.elements.length > 0) {
-    const varName = variableDeclaration.node.id.elements[0].name;
+    const varName = variableDeclaration.node.id.elements[0].name
 
-    fillMissingArguments(reuseMethodArgumentsLength, argumentsLength, path, t)
+    fillMissingArguments({
+      reuseMethodArgumentsLength: reuseMethodArgumentsLength,
+      argumentsLength: argumentsLength,
+      path: path,
+      t: t
+    })
 
     // add debug argument
     path.node.arguments.push(
       t.StringLiteral(varName),
     )
+
+    return true
   }
+
+  return false
 }
 
-export function transformIdentifier(t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength) {
+export function transformIdentifier({ t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength }) {
+  if (t.isExpressionStatement(path.parentPath.node)) {
+    return false
+  }
+
   if (t.isIdentifier(variableDeclaration.node.id)) {
     const varName = variableDeclaration.node.id.name
 
-    fillMissingArguments(reuseMethodArgumentsLength, argumentsLength, path, t)
+    fillMissingArguments({
+      reuseMethodArgumentsLength: reuseMethodArgumentsLength,
+      argumentsLength: argumentsLength,
+      path: path,
+      t: t
+    })
 
     path.node.arguments.push(
       t.StringLiteral(varName),
     )
+
+    return true
   }
+  return false
 }
 
-export function transformEffector(variableDeclaration, path, specialMethodArgumentsLength, argumentsLength, t) {
+export function transformFallback({ t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength }) {
   const parentUnitName = variableDeclaration.node.id.name
-  const effectIndex = (path.parentPath.parentPath.node.body || []).indexOf(path.parentPath.node);
+  const effectIndex    = (path.parentPath.parentPath.node.body || []).indexOf(path.parentPath.node)
 
   if (parentUnitName && effectIndex !== -1) {
-    fillMissingArguments(specialMethodArgumentsLength, argumentsLength, path, t)
+    fillMissingArguments({
+      reuseMethodArgumentsLength: reuseMethodArgumentsLength,
+      argumentsLength: argumentsLength,
+      path: path,
+      t: t
+    })
     path.node.arguments.push(
       t.StringLiteral(`${parentUnitName} Effect (${effectIndex})`),
     )
+
+    return true
   }
+
+  return false
 }

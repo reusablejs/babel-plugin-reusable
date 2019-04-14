@@ -1,4 +1,4 @@
-import { transformArrayPattern, transformEffector, transformIdentifier } from './transformers';
+import { transformArrayPattern, transformFallback, transformIdentifier } from './transformers';
 
 const methodsMap = {
   reuseState: 1,
@@ -6,12 +6,9 @@ const methodsMap = {
   reuseReducer: 2,
   reuseCallback: 2,
   reuseRef: 1,
-  Memo: 2
-}
-
-const parentNameMethodsMap = {
+  Memo: 2,
   reuseEffect: 2
-};
+}
 
 const validImportNames = [
   'reusable',
@@ -51,21 +48,31 @@ export default function (babel) {
                         return;
                       }
 
-                      transformArrayPattern(t, variableDeclaration, reuseMethodArgumentsLength, path, argumentsLength);
-                      transformIdentifier(t, variableDeclaration, path, argumentsLength, reuseMethodArgumentsLength);
-                    }
+                      const isArrayPatternTransformed = transformArrayPattern({
+                        t: t,
+                        variableDeclaration: variableDeclaration,
+                        reuseMethodArgumentsLength: reuseMethodArgumentsLength,
+                        path: path,
+                        argumentsLength: argumentsLength
+                      });
+                      const isIdentifierTransformed = transformIdentifier({
+                        t: t,
+                        variableDeclaration: variableDeclaration,
+                        path: path,
+                        argumentsLength: argumentsLength,
+                        reuseMethodArgumentsLength: reuseMethodArgumentsLength
+                      });
 
-                    // useEffect
-                    const specialMethodArgumentsLength = parentNameMethodsMap[importName];
-                    if (specialMethodArgumentsLength) {
-                      const variableDeclaration = path.findParent((path) => path.isVariableDeclarator());
-
-                      if (argumentsLength > specialMethodArgumentsLength) {
-                        // no need for transformation, already contains debug name
-                        return;
+                      // If it's none of the above fallback to looking for the parent unit
+                      if (!isArrayPatternTransformed && !isIdentifierTransformed) {
+                        transformFallback({
+                          t: t,
+                          variableDeclaration: variableDeclaration,
+                          path: path,
+                          argumentsLength: argumentsLength,
+                          reuseMethodArgumentsLength: reuseMethodArgumentsLength
+                        })
                       }
-
-                      transformEffector(variableDeclaration, path, specialMethodArgumentsLength, argumentsLength, t)
                     }
                   }
                 }
