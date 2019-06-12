@@ -1,6 +1,6 @@
-import { reusable } from 'reusable';
+import { createStore } from 'reusable';
 
-const useCounter = reusable(() => {
+const useCounter = createStore(() => {
   const [count, setCount] = useState(0);
   const nullValue = useState();
   const [value, setValue] = useState(0, 'debugName');
@@ -8,7 +8,7 @@ const useCounter = reusable(() => {
   return { count, value };
 });
 
-const useStep = reusable((id) => {
+const useStep = createStore((id) => {
   const [count, setCount] = useState(0);
   const nullValue = useState();
   const [value, setValue] = useState(0, 'debugName');

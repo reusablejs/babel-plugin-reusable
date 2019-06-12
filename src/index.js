@@ -25,7 +25,7 @@ export default function (babel) {
                       ImportSpecifier(importSpecifierPath) {
                         const localName  = importSpecifierPath.node.local.name;
 
-                        if (methodName === 'reusable' || methodName === localName) {
+                        if (methodName === 'createStore' || methodName === localName) {
                           if (t.isArrowFunctionExpression(path.node.arguments[0])) {
                             const functionDeclaration = t.functionDeclaration(
                               path.parent.id,

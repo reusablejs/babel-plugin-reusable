@@ -1,6 +1,6 @@
-import { reuseState, reuseMemo as memo } from "dudu";
+import { createStore } from "dudu";
 
-const counter = () => {
+const counter = createStore(() => {
   const [count, setCount] = reuseState(0);
   const nullValue = reuseState();
   const [value, setValue] = reuseState(0, 'debugName');
@@ -12,4 +12,4 @@ const counter = () => {
   const retweets = memo(() => {
     return 1000;
   })
-}
+});

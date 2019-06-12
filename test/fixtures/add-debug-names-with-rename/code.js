@@ -1,4 +1,4 @@
-import { reusable as dudu } from 'reusable';
+import { createStore as dudu } from 'reusable';
 
 const useCounter = dudu(() => {
   const [count, setCount] = useState(0);
